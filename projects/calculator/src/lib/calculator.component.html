@@ -1,6 +1,12 @@
 <p>Montant désiré :</p>
 <form action="" (submit)="submit()" class="amount-form">
-  <input type="number" name="amount" [(ngModel)]="amount" min="0" max="999" />
+  <div class="amount-wrapper">
+    <input type="number" name="amount" [(ngModel)]="amount" min="0" max="999" />
+    <button type="button" class="next" (click)="next()">Montant suivant</button>
+    <button type="button" class="previous" (click)="previous()">
+      Montant précédent
+    </button>
+  </div>
   <button type="submit">VALIDER</button>
 </form>
 <p class="error" *ngIf="error">{{ error }}</p>

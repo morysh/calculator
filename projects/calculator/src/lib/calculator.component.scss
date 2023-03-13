@@ -18,11 +18,29 @@ ul {
   gap: 4px;
 }
 
+.amount-wrapper {
+  display: grid;
+  grid-template-areas:
+    "input next"
+    "input previous";
+  gap: 4px;
+}
+
 input[name="amount"] {
   padding: 12px 24px;
   text-align: center;
   border: 1px solid;
   border-radius: 4px;
+
+  grid-area: input;
+}
+
+.next {
+  grid-area: next;
+}
+
+.previous {
+  grid-area: previous;
 }
 
 button {

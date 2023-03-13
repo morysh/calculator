@@ -35,15 +35,10 @@ export class CalculatorComponent {
   }
 
   submit() {
-    this.http
-      .get<ApiResponse>(`${this.host}/shop/${this.shopId}/search-combination`, {
-        headers: new HttpHeaders().set('Authorization', this.authToken!),
-        params: new HttpParams().set('amount', this.amount),
-      })
-      .subscribe({
-        next: (response) => this.handleResponse(response),
-        error: () => this.handleError(),
-      });
+    this.getApiCall(this.amount).subscribe({
+      next: (response) => this.handleResponse(response),
+      error: () => this.handleError(),
+    });
   }
 
   handleResponse(response: ApiResponse) {
@@ -72,5 +67,47 @@ export class CalculatorComponent {
     this.question = false;
     this.amount = response;
     this.submit();
+  }
+
+  next() {
+    // Add random decimal to force computing of next value
+    this.getApiCall(this.amount + 0.5).subscribe({
+      next: (response) => {
+        if (response.ceil) {
+          this.amount = response.ceil.value;
+          this.cards = response.ceil.cards;
+          this.selectedAmount.emit(this.amount);
+        } else {
+          this.error = 'Montant maximum atteint';
+        }
+      },
+      error: () => this.handleError(),
+    });
+  }
+
+  previous() {
+    // Substract random decimal to force computing of next value
+    this.getApiCall(this.amount - 0.5).subscribe({
+      next: (response) => {
+        if (response.floor) {
+          this.amount = response.floor.value;
+          this.cards = response.floor.cards;
+          this.selectedAmount.emit(this.amount);
+        } else {
+          this.error = 'Montant minimum atteint';
+        }
+      },
+      error: () => this.handleError(),
+    });
+  }
+
+  getApiCall(amount: number) {
+    return this.http.get<ApiResponse>(
+      `${this.host}/shop/${this.shopId}/search-combination`,
+      {
+        headers: new HttpHeaders().set('Authorization', this.authToken!),
+        params: new HttpParams().set('amount', amount),
+      }
+    );
   }
 }
