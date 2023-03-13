@@ -59,3 +59,9 @@ button {
 .error {
   color: red;
 }
+
+[disabled] {
+  background-color: #888 !important;
+  color: #333;
+  cursor: default;
+}

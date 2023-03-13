@@ -34,9 +34,8 @@ describe('CalculatorComponent', () => {
     httpMock.verify();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  /////////////////////////////////////////////////////////////////////////////
+  // Base component
 
   it('should call proper URL with proper parameter', () => {
     let amountInput = fixture.debugElement.query(
@@ -125,6 +124,9 @@ describe('CalculatorComponent', () => {
       'Erreur lors de la communication avec le serveur'
     );
   });
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Next and previous buttons
 
   it('should request an amount beetween current and (current + 1) when clicking next button', () => {
     let amountInput = fixture.debugElement.query(
@@ -268,6 +270,71 @@ describe('CalculatorComponent', () => {
     fixture.detectChanges();
     let error = fixture.debugElement.query(By.css('.error')).nativeElement;
     expect(error.textContent).toEqual('Montant minimum atteint');
+  });
+
+  /////////////////////////////////////////////////////////////////////////////
+  // ControlValueAccessors
+
+  it('should output value when writeValue is called', () => {
+    let selectedAmount = 0;
+    component.selectedAmount.subscribe((amount) => (selectedAmount = amount));
+
+    component.writeValue(42);
+
+    expect(selectedAmount).toEqual(42);
+  });
+
+  it('should call onTouched when next button is clicked', () => {
+    let called = false;
+    let response = {
+      ceil: {
+        value: 42,
+        cards: [42],
+      },
+    };
+    component.registerOnTouched(() => (called = true));
+
+    fixture.debugElement.query(By.css('.next')).nativeElement.click();
+    const req = httpMock.expectOne(() => true);
+    req.flush(response);
+
+    expect(called).toBeTrue();
+  });
+
+  it('should call onTouched when previous button is clicked', () => {
+    let called = false;
+    let response = {
+      floor: {
+        value: 42,
+        cards: [42],
+      },
+    };
+    component.registerOnTouched(() => (called = true));
+
+    fixture.debugElement.query(By.css('.previous')).nativeElement.click();
+    const req = httpMock.expectOne(() => true);
+    req.flush(response);
+
+    expect(called).toBeTrue();
+  });
+
+  it('should call onTouched when validate button is clicked', () => {
+    let called = false;
+    let response = {
+      ceil: {
+        value: 42,
+        cards: [42],
+      },
+    };
+    component.registerOnTouched(() => (called = true));
+
+    fixture.debugElement
+      .query(By.css('button[type="submit"]'))
+      .nativeElement.click();
+    const req = httpMock.expectOne(() => true);
+    req.flush(response);
+
+    expect(called).toBeTrue();
   });
 
   /////////////////////////////////////////////////////////////////////////////

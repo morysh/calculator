@@ -1,13 +1,29 @@
 <p>Montant désiré :</p>
 <form action="" (submit)="submit()" class="amount-form">
   <div class="amount-wrapper">
-    <input type="number" name="amount" [(ngModel)]="amount" min="0" max="999" />
-    <button type="button" class="next" (click)="next()">Montant suivant</button>
-    <button type="button" class="previous" (click)="previous()">
+    <input
+      type="number"
+      name="amount"
+      [(ngModel)]="amount"
+      min="0"
+      max="999"
+      (change)="onChange(amount)"
+      (blur)="markAsTouched()"
+      [disabled]="disabled"
+    />
+    <button type="button" class="next" (click)="next()" [disabled]="disabled">
+      Montant suivant
+    </button>
+    <button
+      type="button"
+      class="previous"
+      (click)="previous()"
+      [disabled]="disabled"
+    >
       Montant précédent
     </button>
   </div>
-  <button type="submit">VALIDER</button>
+  <button type="submit" [disabled]="disabled">VALIDER</button>
 </form>
 <p class="error" *ngIf="error">{{ error }}</p>
 <ng-container *ngIf="cards.length > 0">
