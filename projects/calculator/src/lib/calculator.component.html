@@ -1,0 +1,20 @@
+<p>Montant désiré :</p>
+<form action="" (submit)="submit()" class="amount-form">
+  <input type="number" name="amount" [(ngModel)]="amount" min="0" max="999" />
+  <button type="submit">VALIDER</button>
+</form>
+<p class="error" *ngIf="error">{{ error }}</p>
+<ng-container *ngIf="cards.length > 0">
+  <p>Votre montant est composé des cartes suivantes :</p>
+  <ul>
+    <li *ngFor="let card of cards" class="card">{{ card }}€</li>
+  </ul>
+</ng-container>
+<glady-popup
+  *ngIf="question"
+  [choices]="choices"
+  (response)="handleUserChoice($event)"
+>
+  Le montant demandé n'est pas disponible.<br />
+  Veuillez choisir un montant disponible :
+</glady-popup>

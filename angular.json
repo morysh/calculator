@@ -5,6 +5,11 @@
   "projects": {
     "calculator": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "projects/calculator",
       "sourceRoot": "projects/calculator/src",
       "prefix": "glady",

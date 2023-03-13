@@ -1,0 +1,8 @@
+<section>
+  <p class="question"><ng-content></ng-content></p>
+  <div class="choices">
+    <button *ngFor="let choice of choices" (click)="choose(choice)">
+      {{ choice }}
+    </button>
+  </div>
+</section>
